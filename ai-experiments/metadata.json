@@ -1,0 +1,6 @@
+{
+  "name": "CV Portfolio Builder & AI ATS Checker",
+  "description": "Aplikasi pembuat CV & Portofolio Web elegan terintegrasi dengan AI ATS Friendly Checker. Didesain dengan gaya visual modern LDK Syahid.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

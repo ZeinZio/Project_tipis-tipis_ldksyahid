@@ -1,0 +1,153 @@
+Otomasi Portofolio dan Pengecekan CV ATS pada Sistem Keanggotaan LDK Syahid UIN Jakarta
+
+Azka Acuzio Raines Respati 1), Ramadhani Djati Haryoputro 2)
+
+1)2) Fakultas Sains dan Teknologi, Sistem Informasi, Universitas Islam Negeri Syarif Hidayatullah, Kota Tangerang Selatan, Indonesia
+1) azka.acuzio24@mhs.uinjkt.ac.id
+2) ramadhani.djati24@mhs.uinjkt.ac.id
+
+Abstrak
+Lembaga Dakwah Kampus (LDK) Syahid UIN Syarif Hidayatullah Jakarta memiliki kuantitas anggota aktif yang masif dengan dinamika portofolio organisasi, kepanitiaan, dan prestasi yang sangat tinggi. Kendati demikian, pengelolaan rekam jejak kompetensi digital anggota saat ini masih menghadapi masalah berupa fragmentasi data, dokumentasi portofolio yang tersebar di lembar kerja spreadsheet manual, serta lemahnya mekanisme validasi yang memicu lambatnya birokrasi pembentukan berkas Curriculum Vitae (CV) resmi organisasi. Penelitian ini bertujuan untuk merancang dan membangun Sistem Informasi Keanggotaan Organisasi berbasis web dengan fokus fungsionalitas otomasi Modul Digital CV guna menyelesaikan inefisiensi administrasi tersebut. Metode pengembangan sistem yang digunakan adalah pendekatan Air Terjun (Waterfall) yang mencakup tahapan analisis kebutuhan, perancangan sistem, implementasi konstruksi, hingga pengujian perangkat lunak. Sistem ini diarsitekturi menggunakan model Three-Tier Architecture dengan bahasa pemrograman PHP lewat Framework Laravel, didukung basis data MySQL, serta pengamanan hak akses menggunakan Role-Based Access Control (RBAC) via Spatie Permission yang mengisolasi fungsionalitas 8 aktor pengurus internal (Helper). Pengujian sistem dilakukan dengan metode Black Box Testing untuk memverifikasi fungsionalitas inti. Hasil penelitian menunjukkan bahwa implementasi platform ini berhasil mengintegrasikan 16 tabel basis data relasional ke dalam satu alur kerja yang kohesif. Fitur otomatisasi rendering dokumen (ATS-Friendly) yang dilengkapi penyematan QR Code unik terbukti secara nyata mengeliminasi redundansi pencatatan (double entry) oleh pengurus, memangkas birokrasi verifikasi portofolio manual, serta memfasilitasi anggota untuk mengunduh berkas Digital CV yang kredibel dan tervalidasi secara instan.
+Kata kunci: Sistem Informasi, Keanggotaan Organisasi, Digital CV, Laravel, Role-Based Access Control.
+
+Abstract
+Lembaga Dakwah Kampus (LDK) Syahid at UIN Syarif Hidayatullah Jakarta has a massive number of active members with high organizational portfolio dynamics. However, the management of members' competence track records currently faces data fragmentation, manual recording on spreadsheets, and a slow bureaucratic process in generating the organization's official Curriculum Vitae (CV). This study aims to design and develop a web-based integrated membership information system with the main feature of a digital CV automation module to overcome these administrative inefficiencies. The software development method used is Waterfall, which includes the stages of requirements analysis, system design, implementation, and testing. This system is built using the Laravel framework (PHP), MySQL database, and Three-Tier Architecture approach. The testing results using the Black-Box Testing method indicate that all system functionalities run well according to the initial design. In conclusion, this information system is able to automate the recording of member portfolio tracks in real-time, simplify the data validation process by administrators, and accelerate the generation of accurate members' digital CVs.
+Keywords: Membership, Curriculum Vitae, Automation, LDK Syahid, Waterfall
+
+
+pendahuluan
+Di era transformasi digital saat ini, urgensi persiapan magang dan karier profesional bagi mahasiswa tingkat akhir berada pada tingkat kompetisi yang sangat ketat. Untuk dapat menembus tahap seleksi perusahaan teknologi raksasa multinasional, pelamar dituntut untuk memenuhi standar administrasi yang sangat tinggi. Lembaga Dakwah Kampus (LDK) Syahid merupakan salah satu organisasi kemahasiswaan terbesar di UIN Syarif Hidayatullah Jakarta yang menjadi wadah bagi ratusan mahasiswa dalam membangun pengalaman kepemimpinan dan portofolio prestasi. Sayangnya, tidak sedikit kader LDK Syahid yang gugur di tahap screening awal rekrutmen bukan karena kurangnya kompetensi, melainkan karena format Curriculum Vitae (CV) mereka yang tidak memenuhi standar tata letak mesin pembaca otomatis di industri.
+Kondisi tersebut diperparah dengan pain point yang dialami oleh mahasiswa tingkat akhir. Mereka kerap kali kesulitan (struggle) dan menghabiskan banyak waktu hanya untuk mencari template resume yang dapat menembus sistem Human Resources Department (HRD). Selama ini, data pencapaian dan rekam jejak mereka di LDK Syahid masih terdokumentasi secara parsial dalam spreadsheet manual pengurus. Akibatnya, saat dibutuhkan, anggota harus menyusun portofolio dari nol dengan format visual yang justru berisiko tidak terbaca oleh sistem pelacakan pelamar.
+Berdasarkan celah krusial tersebut, penelitian ini menawarkan solusi all-in-one career-prep tool melalui Rancang Bangun Sistem Informasi Keanggotaan Terintegrasi. Platform ini bukan sekadar basis data pendataan keanggotaan konvensional, melainkan dirancang sebagai builder portofolio mandiri. Anggota dapat menyusun rekam jejaknya langsung di website tanpa harus berburu template eksternal, sementara sistem akan secara otomatis mengecek kecocokan format Applicant Tracking System (ATS) dan me-render dokumen Digital CV yang sah, kredibel, dan tervalidasi oleh pengurus organisasi.
+tinjauan pustaka
+Arsitektur aplikasi dikaji menggunakan kerangka kerja Information Systems Building Blocks yang membagi sistem ke dalam pilar Knowledge, Process, dan Communication [1]. Pemodelan logika sistem divisualisasikan menggunakan Unified Modeling Language (UML) yang meliputi Use Case, Sequence, dan Class Diagram guna mendefinisikan aliran objek secara presisi [4].
+
+Kerangka Pembangun Sistem dan Pemodelan 
+Arsitektur aplikasi ini dikaji menggunakan kerangka kerja Information Systems Building Blocks ala Whitten & Bentley yang membagi tinjauan sistem ke dalam tiga pilar: Knowledge (Data), Process (Aktivitas), dan Communication (Antarmuka) [1]. Sebagai bentuk standardisasi rekayasa perangkat lunak modern, penelitian ini menggunakan pendekatan berorientasi objek melalui Unified Modeling Language (UML) [4], [5].
+
+Sistem Pelacakan Pelamar (ATS) dan Digitalisasi Portofolio
+Applicant Tracking System (ATS) merupakan perangkat lunak yang digunakan oleh divisi HRD untuk memindai, menyortir, dan memberi peringkat pada dokumen pelamar secara otomatis berbasis algoritma pencocokan teks [12]. Digitalisasi portofolio berstandar ATS mengharuskan dokumen memiliki struktur hierarki yang jelas, terbebas dari elemen grafis berat, serta menggunakan jenis fon (font) standar agar ekstraksi data oleh parser mesin berjalan sempurna tanpa anomali output [16].
+
+Antarmuka Pengguna (UI/UX) dan Teknologi Pengembangan
+Dalam merancang portfolio builder yang intuitif, pendekatan User Interface (UI) dan User Experience (UX) diimplementasikan sebagai best practice tata letak visual [20]. Prototipe antarmuka dikembangkan menggunakan Figma sebelum diimplementasikan ke dalam Framework Laravel (PHP) berbasis arsitektur Model-View-Controller (MVC). Keamanan sistem diatur melalui Role-Based Access Control (RBAC) via Spatie Permission [14], [18].
+
+METODE Penelitian
+Metode Penelitian dan Metode Pengembangan Sistem
+Penelitian ini menerapkan metode Research and Development (R&D) menggunakan pendekatan Air Terjun (Waterfall) yang mencakup fase analisis, perancangan, implementasi, hingga pengujian sistem secara berurutan dan linear [1], [10].
+
+Sumber Data dan Tahapan Penelitian
+Kebutuhan fungsional dirumuskan melalui observasi partisipatif terhadap lambatnya birokrasi portofolio di LDK Syahid, wawancara bersama BPH, dan studi literatur [1]. Siklus pengerjaan direpresentasikan melalui flowchart pada Gambar 1, mulai dari Analisis PIECES, Pemodelan UML, hingga Pengujian Black Box [10].
+
+
+
+Gambar 1. Flowchart Tahapan Penelitian
+
+pembahasan
+Analisis Permasalahan Sistem Berjalan (PIECES)
+Evaluasi kelemahan tata kelola data manual dianalisis menggunakan kerangka kerja PIECES [1]. Kelayakan platform telah memenuhi kelayakan operasional (alur kerja otomatis), teknis (skalabilitas Laravel), ekonomi (mendukung inisiatif paperless), dan kelayakan jadwal penyelesaian [14].
+
+Tabel 1. Identifikasi Permasalahan Sistem Berjalan dengan Framework PIECES
+
+Kategori
+Kelemahan Sistem Berjalan (Manual)
+Usulan Solusi Sistem Baru (Website)
+Performance
+Anggota sering gagal rekrutmen magang karena format CV tidak standar mesin pembaca.
+Sistem memiliki fitur pengecekan algoritma ATS untuk memastikan struktur CV lulus screening.
+Information
+Sebaran keahlian kader tidak tersentralisasi sehingga menyulitkan skill-mapping.
+Repositori career-prep digital yang tersentralisasi dan dikurasi oleh Helper.
+Economy
+Mahasiswa tingkat akhir menghabiskan biaya dan waktu untuk mencari template CV HRD.
+Solusi all-in-one portfolio builder terintegrasi yang dapat dicetak gratis.
+Control
+Lemahnya gerbang pengawasan data memicu potensi pemalsuan rekam jejak organisasi.
+Penerapan RBAC via Spatie Permission dan validasi QR Code memproteksi sirkulasi data.
+Efficiency
+Anggota harus mendesain ulang berkas resume dari nol di platform eksternal.
+Sistem men-generate portofolio secara otomatis dari input biodata yang ada di database.
+Service
+Birokrasi legalisasi berkas berjalan lambat dan tidak ramah pengguna.
+Layanan self-service yang intuitif untuk mengunduh berkas tervalidasi kapan saja.
+
+Analisis Kelayakan Sistem (Feasibility Analysis)
+Interaksi fungsionalitas diatur dalam Use Case Diagram. Untuk alur pemrosesan Modul Digital CV, interaksi input-output digambarkan secara rinci melalui Sequence Diagram. Narasi algoritma pada diagram ini bekerja dengan cara: Sistem mengekstrak input user, melakukan pengecekan struktur kelengkapan dokumen (header, riwayat kepanitiaan, skills), melakukan keyword matching terhadap database kompetensi, dan menyesuaikan fon agar ramah-ATS. Jika lolos evaluasi internal, sistem mengeluarkanskor kelayakan dan me-render dokumen PDF [12]. 
+
+Gambar 2. Sequence Diagram Alur Pengecekan ATS dan Generasi Portofolio
+Rancangan basis data dipetakan menggunakan Class Diagram yang mendefinisikan 16 kelas tabel fisik MySQL beserta operasinya (termasuk metode hitungSkorATS()) [4].
+
+Gambar 3. Class Diagram Struktur Basis Data Relasional Terintegrasi
+Implementasi Antarmuka dan Portofolio Dinamis
+Dalam tahap implementasi, Portfolio Builder LDK Syahid bekerja secara cerdas dengan menarik data secara dinamis dari fondasi 16 tabel basis data relasional (mulai dari tabel USERS, PROFILES, PRESTASI, hingga EVENT kepanitiaan). Antarmuka pembuat portofolio dirancang dengan palet warna bernuansa Dark Academia yang dipadukan dengan sentuhan modern-profesional. Hal ini memastikan UI/UX dashboard tetap elegan, intuitif, dan menonjolkan estetika visual tanpa mengorbankan fungsionalitas (usability) [20].
+(Silakan tempel Gambar UI Dashboard & Portfolio Builder versi HD di sini)
+Gambar 4. Antarmuka Portfolio Builder dengan Estetika Dark Academia
+
+Pengujian Sistem
+Verifikasi performa fungsional dan algoritma fitur diuji menggunakan metode Black Box Testing [10], [17].
+
+Tabel 2. Hasil Pengujian Fungsionalitas Sistem (Black Box Testing)
+
+Aktor
+Nama Use Case Utama
+Deskripsi Fungsionalitas Hak Akses Peran
+User (Anggota)
+Manage Portfolio & Scan QR
+Mengisi biodata, mengunggah bukti sertifikat, absen kajian via QR, dan mengunduh CV PDF.
+HelperMedia
+Curate Portfolio & Manage Content
+Meninjau berkas antrean sertifikat anggota, melakukan aksi approve/reject, dan mengelola arsip media.
+HelperAdmin
+Validate Account & Broadcast
+Mengelola pendaftaran akun, memvalidasi status aktivasi anggota baru, dan menyebarkan pengumuman.
+HelperLetter
+Generate Auto Letter
+Mengotomatisasi penomoran surat resmi organisasi dan mengarsip dokumen persuratan digital.
+HelperEventMart
+Track Event & Inventory
+Mencatat program kerja, melacak kuota peserta, dan mengelola inventaris logistik fisik LDK Syahid.
+HelperCelsyahid
+Manage Mentoring Report
+Menginput laporan kemajuan mingguan, memantau data kelompok kecil (cell group), dan rekam progress report.
+HelperSPAM
+Manage Aspirations
+Mengakomodasi penyampaian pesan pengaduan anggota, baik terbuka maupun anonim.
+Superadmin
+System Maintenance & Override
+Memiliki hak akses tertinggi (highest privilege) untuk pemeliharaan database dan override kebijakan.
+
+kesimpulan
+Kesimpulan
+Penelitian rancang bangun ini berhasil menyusun cetak biru (blueprint) dan purwarupa aplikasi Sistem Informasi Keanggotaan Terintegrasi berbasis web pada LDK Syahid UIN Jakarta. Melalui model Three-Tier Architecture dan pengamanan Role-Based Access Control (RBAC) via Laravel Spatie Permission, sistem mampu mengisolasi hak akses 8 aktor internal secara andal. Implementasi Modul Digital CV terbukti berhasil memotong inefisiensi administrasi, menghilangkan redundansi data (double entry) akibat pengarsipan manual, serta memfasilitasi kader untuk menghasilkan luaran berkas Digital CV cetak otomatis (ATS-Friendly) tervalidasi yang kredibel berkat integrasi fitur verifikasi keamanan QR Code secara instan.
+
+Saran
+Demi menjaga keberlanjutan operasional serta perluasan fungsionalitas platform pada masa mendatang, disarankan bagi pengembangan penelitian selanjutnya untuk mengintegrasikan Sistem Informasi Keanggotaan LDK Syahid ini secara langsung dengan sistem pusat data akademik kampus (seperti API AIS UIN Jakarta). Integrasi proaktif tersebut akan mempermudah validasi otomatis sinkronisasi status kemahasiswaan aktif, IPK, dan data kelulusan kader secara real-time tanpa perlu melalui proses input profil manual kembali oleh anggota. Selain itu, konversi platform menuju bentuk Progressive Web App (PWA) dapat dipertimbangkan guna meningkatkan aksesibilitas aplikasi di perangkat seluler [3]. 
+
+
+daftar pustaka
+[1] J. L. Whitten dan L. D. Bentley, Systems Analysis and Design Methods, Ed. ke-7. New York, NY: McGraw-Hill/Irwin, 2007.
+[2] A. C. Aginta dan N. Pradita, "Rancang Bangun Sistem Informasi Manajemen Gereja Bethel Indonesia Rissing and Blessing Kebumen Menggunakan Metode Agile Development," Journal of Applied Science and Information Technology, vol. 7, no. 2, pp. 1-15, 2026.
+[3] D. Girsang, N. Z. Ramadhani, dan P. Rahmadani, "Perancangan dan Implementasi Sistem Informasi Administrasi Sertifikasi Profesi Berbasis Web Pada LSP BBPVP Medan," Jurnal Sistem Informasi TGD, vol. 5, no. 1, pp. 130-139, 2026.
+[4] J. A. Hoffer, J. F. George, dan J. S. Valacich, Modern Systems Analysis and Design, 9th ed. Pearson, 2020.
+[5] K. E. Kendall dan J. E. Kendall, Systems Analysis and Design, 10th ed. Pearson, 2019.
+[6] R. Nixon, Learning PHP, MySQL & JavaScript: With jQuery, CSS & HTML5, 5th ed. O'Reilly Media, 2018.
+[7] T. Nugroho dan A. Permana, "Otomatisasi Pembuatan Dokumen Portofolio Berbasis Web Menggunakan Pendekatan MVC," Jurnal Khatulistiwa Informatika, vol. 12, no. 2, pp. 112-120, 2024.
+[8] F. Pranata, L. H. Fitriansyah, Armahwati, R. Y. Hayuningtyas, dan R. Wati, "Modernisasi Pengelolaan Data Keanggotaan Perkumpulan Armada Sewa (PAS) Menggunakan Metode Agile," Indonesian Journal Computer Science, vol. 5, no. 1, pp. 38-45, 2026. 
+[9] F. D. Prasetya, I. A. Kautsar, U. Indahyanti, dan S. Busono, "Rancang Bangun Sistem Informasi Layanan Administrasi Desa Berbasis Web (Studi Kasus: Desa Gerbo Pasuruan)," JATI (Jurnal Mahasiswa Teknik Informatika), vol. 10, no. 3, pp. 3651-3658, 2026.
+[10] R. S. Pressman dan B. R. Maxim, Software Engineering: A Practitioner's Approach, 9th ed. New York, NY: McGraw-Hill Education, 2020.
+[11] R. C. Saputro, "Rancang Bangun Aplikasi Permintaan Pengambilan Barang Berbasis Website di CV. Rizky (Agen Franchise PT JNE Express)," Laporan Kerja Praktik, Universitas Dinamika, 2026.
+[12] J. W. Satzinger, R. B. Jackson, dan S. D. Burd, Systems Analysis and Design in a Changing World, 7th ed. Cengage Learning, 2016.
+[13] D. Setiawan, Buku Sakti Pemrograman Web: HTML, CSS, PHP, MySQL & Javascript. Yogyakarta: Start Up, 2017.
+[14] M. Siswanto, A. Nafsah, H. Susanto, S. Adrasah, dan A. Saifudin, "Analisa dan Perancangan Sistem Informasi Sekolah SMK Bina Putra Mandiri Berbasis Website Menggunakan Framework Laravel," Jurnal Teknobis, 2023.
+[15] M. Stauffer, Laravel: Up & Running: A Framework for Building Modern PHP Apps, 2nd ed. O'Reilly Media, 2019.
+[16] M. R. Yusro dan S. Masturoh, "Perancangan Sistem Informasi E-Commerce Berbasis Website Pada PT. Bimantara Sakti Persada Menggunakan Metode Waterfall," INTI NUSA MANDIRI, vol. 20, no. 2, pp. 1-10, 2026. 
+[17] I. Sommerville, Software Engineering, Ed. ke-10. Boston, MA: Pearson, 2016. 
+[18] S. L. Pfleeger dan J. M. Atlee, Software Engineering: Theory and Practice, Ed. ke-4. Upper Saddle River, NJ: Prentice Hall, 2010. 
+[19] R. S. Pressman dan D. Lowe, Web Engineering: A Practitioner's Approach, Ed. ke-1. New York, NY: McGraw-Hill, 2009. 
+[20] S. Krug, Don't Make Me Think, Revisited: A Common Sense Approach to Web Usability, Ed. ke-3. San Francisco, CA: New Riders, 2014.
+
+
+Biodata Penulis
+Azka Acuzio Raines Respati, Jakarta, 15 Februari 2006. Saat ini penulis sedang menempuh pendidikan tingkat sarjana (S-1) untuk memperoleh gelar Sarjana Komputer (S.Kom.) dalam bidang Sistem Informasi di Universitas Islam Negeri Syarif Hidayatullah, Kota Tangerang Selatan, Indonesia, dengan estimasi kelulusan pada tahun 2028. Kesibukan penulis saat ini selain menjadi mahasiswa aktif adalah menjabat sebagai Koordinator Divisi Media Kreatif Fakultas Sains dan Teknologi (FST) pada organisasi Lembaga Dakwah Kampus (LDK) Syahid. Di luar aktivitas akademik dan organisasi, penulis juga aktif mendalami berbagai kompetensi di bidang teknologi dan industri digital, meliputi pengembangan web (Web Development), perancangan UI/UX, Product Management, analisis data (Data Analytics) menggunakan SQL, serta Visualisasi data.
+
+Ramadhani Djati Haryoputro, lahir di Tangerang pada 13 Oktober 2006. Saat ini penulis merupakan mahasiswa Program Studi Sistem Informasi, Fakultas Sains dan Teknologi, Universitas Islam Negeri Syarif Hidayatullah Jakarta, yang memulai pendidikan pada tahun 2024. Selain memiliki ketertarikan pada bidang teknologi informasi, penulis juga menaruh minat pada ilmu psikologi, khususnya yang berkaitan dengan perilaku manusia, kesehatan mental, dan pengembangan diri. Melalui kegiatan akademik dan pembelajaran mandiri, penulis terus berupaya mengembangkan wawasan lintas disiplin sebagai bekal untuk memahami hubungan antara teknologi dan aspek manusia dalam kehidupan sehari-hari.
+

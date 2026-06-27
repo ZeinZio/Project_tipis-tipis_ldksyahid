@@ -1,0 +1,74 @@
+<?php
+
+namespace App\Exceptions;
+
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\ViewErrorBag;
+use Spatie\Permission\Exceptions\UnauthorizedException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Throwable;
+
+class Handler extends ExceptionHandler
+{
+    /**
+     * A list of the exception types that are not reported.
+     *
+     * @var array<int, class-string<Throwable>>
+     */
+    protected $dontReport = [
+        //
+    ];
+
+    /**
+     * A list of the inputs that are never flashed for validation exceptions.
+     *
+     * @var array<int, string>
+     */
+    protected $dontFlash = [
+        'current_password',
+        'password',
+        'password_confirmation',
+    ];
+
+    /**
+     * Register the exception handling callbacks for the application.
+     *
+     * @return void
+     */
+    protected function renderHttpException(HttpExceptionInterface $e)
+    {
+        $view = "errors.{$e->getStatusCode()}";
+
+        if (!view()->exists($view)) {
+            $view = 'errors.default';
+        }
+
+        return response()->view($view, [
+            'errors' => new ViewErrorBag,
+            'exception' => $e,
+        ], $e->getStatusCode(), $e->getHeaders());
+    }
+
+    public function register()
+    {
+        $this->reportable(function (Throwable $e) {
+            //
+        });
+
+        $this->renderable(function (UnauthorizedException $e, $request) {
+            if (!auth()->check()) {
+                alert()->info('Maaf', 'Harap Masuk Terlebih Dahulu!')->showConfirmButton('Ok', '#00a79d');
+                return redirect()->route('login');
+            }
+
+            // User logged in but doesn't have the required role/permission
+            $user = auth()->user();
+            if ($user->hasAnyRole(['Superadmin', 'HelperAdmin', 'HelperCelsyahid', 'HelperEventMart', 'HelperSPAM', 'HelperMedia', 'HelperLetter'])) {
+                alert()->error('Akses Ditolak', 'Anda tidak memiliki izin untuk mengakses halaman ini.')->showConfirmButton('Ok', '#00a79d');
+                return redirect('/admin/dashboard');
+            }
+
+            return redirect('/')->with('sweetalert_error', true);
+        });
+    }
+}

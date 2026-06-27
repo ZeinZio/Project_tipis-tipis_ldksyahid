@@ -1,0 +1,212 @@
+
+
+Otomasi Portofolio dan Pengecekan CV ATS pada Sistem Keanggotaan LDK Syahid
+
+
+
+
+
+
+Artikel ini diajukan xx xxxx 2025, direvisi xx xxxx 2025, diterima xx xxxx 2025, dan dipublikasikan xx xxxx 2025.
+
+Abstract
+Lembaga Dakwah Kampus (LDK) Syahid faces administrative challenges in recording organizational track records and creating member portfolios that do not yet meet the Applicant Tracking System (ATS) standards. This results in many members failing the administrative selection stage for professional internships. This study aims to design and build an integrated Membership Information System equipped with an automated Digital CV Builder feature. System requirements were formulated through participatory observation and interviews, then developed using the Waterfall method which includes PIECES analysis, Unified Modeling Language (UML) design, and interface implementation. The system is built using the Laravel framework and MySQL database management system, equipped with Role-Based Access Control (RBAC) protection via Spatie Permission to secure data across various access levels. The results of functionality testing using the Black Box Testing method on [isi jumlah, misal: 25] test scenarios showed a success rate of [isi persentase, misal: 100%], where all modules, including ATS structure validation, ran seamlessly without errors. This system has proven effective in cutting the bureaucracy of portfolio creation and standardizing member resumes according to industry needs.
+
+Keywords: Information System, Membership, Digital CV, Automation, Laravel
+
+Abstrak
+Lembaga Dakwah Kampus (LDK) Syahid menghadapi tantangan administratif dalam pendataan rekam jejak organisasi dan pembuatan portofolio anggota yang belum memenuhi standar Applicant Tracking System (ATS). Hal ini mengakibatkan banyak anggota gugur dalam tahapan seleksi administrasi magang profesional. Penelitian ini bertujuan untuk merancang dan membangun Sistem Informasi Keanggotaan terintegrasi yang dilengkapi dengan fitur Digital CV Builder otomatis. Kebutuhan sistem dirumuskan melalui observasi partisipatif dan wawancara, kemudian dikembangkan menggunakan metode Waterfall yang mencakup analisis PIECES, perancangan Unified Modeling Language (UML), hingga implementasi antarmuka. Sistem ini dibangun menggunakan framework Laravel dan sistem manajemen basis data MySQL, serta dilengkapi perlindungan Role-Based Access Control (RBAC) via Spatie Permission untuk mengamankan data dari berbagai tingkatan hak akses. Hasil pengujian fungsionalitas menggunakan metode Black Box Testing terhadap [isi jumlah, misal: 25] skenario uji menunjukkan tingkat keberhasilan sebesar [isi persentase, misal: 100%], di mana seluruh modul termasuk validasi struktur ATS berjalan tanpa galat. Sistem ini terbukti efektif dalam memangkas birokrasi pembuatan portofolio dan menstandardisasi resume anggota sesuai kebutuhan industri. 
+
+Kata Kunci: Sistem Informasi, Keanggotaan, Digital CV, Otomasi, Laravel
+PENDAHULUAN
+Di era transformasi digital saat ini, urgensi persiapan magang dan karier profesional bagi mahasiswa tingkat akhir berada pada tingkat kompetisi yang sangat ketat. Untuk dapat menembus tahap seleksi perusahaan teknologi raksasa multinasional, pelamar dituntut untuk memenuhi standar administrasi yang sangat tinggi. Lembaga Dakwah Kampus (LDK) Syahid merupakan salah satu organisasi kemahasiswaan terbesar di UIN Syarif Hidayatullah Jakarta yang menjadi wadah bagi ratusan mahasiswa dalam membangun pengalaman kepemimpinan dan portofolio prestasi. Sayangnya, tidak sedikit kader LDK Syahid yang gugur di tahap screening awal rekrutmen bukan karena kurangnya kompetensi, melainkan karena format Curriculum Vitae (CV) mereka yang tidak memenuhi standar tata letak mesin pembaca otomatis di industri.
+
+Kondisi tersebut diperparah dengan pain point yang dialami oleh mahasiswa tingkat akhir, di mana mereka kerap kali kesulitan dan menghabiskan banyak waktu hanya untuk mencari template resume yang dapat menembus sistem Human Resources Department (HRD). Selama ini, data pencapaian dan rekam jejak mereka di LDK Syahid masih terdokumentasi secara parsial dalam spreadsheet manual pengurus. Akibatnya, saat dibutuhkan, anggota harus menyusun portofolio dari nol dengan format visual yang justru berisiko tidak terbaca oleh sistem pelacakan pelamar.  
+
+Berdasarkan celah krusial tersebut, penelitian ini menawarkan solusi all-in-one career-prep tool melalui rancang bangun Sistem Informasi Keanggotaan Terintegrasi. Platform ini bukan sekadar basis data pendataan keanggotaan konvensional, melainkan dirancang sebagai builder portofolio mandiri. Anggota dapat menyusun rekam jejaknya langsung di website tanpa harus berburu template eksternal, sementara sistem akan secara otomatis mengecek kecocokan format Applicant Tracking System (ATS) dan me-render dokumen Digital CV yang sah, kredibel, dan tervalidasi oleh pengurus organisasi.  
+
+Dalam pengembangan sistem ini, arsitektur aplikasi dikaji secara komprehensif menggunakan kerangka kerja Information Systems Building Blocks yang membagi tinjauan sistem ke dalam tiga pilar utama, yaitu Knowledge (Data), Process (Aktivitas), dan Communication (Antarmuka) (Whitten & Bentley, 2007). Sebagai bentuk standardisasi rekayasa perangkat lunak modern, pemodelan logika sistem divisualisasikan menggunakan Unified Modeling Language (UML) guna mendefinisikan aliran objek dan interaksi fungsional secara presisi (Hoffer et al., 2020; Kendall & Kendall, 2019). Selanjutnya, untuk menghasilkan portfolio builder yang intuitif dan mudah digunakan oleh anggota organisasi, pendekatan User Interface (UI) dan User Experience (UX) diimplementasikan sebagai pedoman best practice dalam merancang tata letak visual antarmuka (Krug, 2014).
+
+Terkait dengan fungsionalitas utamanya, perangkat lunak ini dirancang untuk dapat memindai dan menyortir dokumen pelamar secara otomatis layaknya algoritma pencocokan teks pada sistem Applicant Tracking System (ATS) di industri (Satzinger et al., 2016). Digitalisasi portofolio berstandar ATS mengharuskan dokumen luaran memiliki struktur hierarki yang jelas, terbebas dari elemen grafis yang berat, serta menggunakan fon standar agar ekstraksi data oleh parser mesin dapat berjalan sempurna tanpa anomali keluaran (Yusro & Masturoh, 2026). Untuk mengakomodasi tingkat kompleksitas tersebut, prototipe antarmuka diimplementasikan ke dalam Framework Laravel (PHP) berbasis arsitektur Model-View-Controller (MVC). Mengingat sistem ini mengelola rekam jejak dan data sensitif kepengurusan, keamanan hak akses sistem turut diatur secara berlapis melalui Role-Based Access Control (RBAC) via modul Spatie Permission guna mengisolasi fungsionalitas antaraktor secara aman (Siswanto et al., 2023; Pfleeger & Atlee, 2010).
+
+Mengacu pada urgensi dan landasan teori tersebut, penelitian ini bertujuan untuk merancang, membangun, dan menguji Sistem Informasi Keanggotaan berbasis web yang dilengkapi dengan modul otomatisasi pembuat Digital CV. Implementasi sistem ini diharapkan dapat memberikan kontribusi nyata dalam meningkatkan efisiensi tata kelola administrasi organisasi sekaligus memperbesar peluang mahasiswa untuk menembus rekrutmen profesional di dunia industri.
+METODE PENELITIAN
+Metode Pengembangan Sistem
+Penelitian ini menerapkan metode Research and Development (R&D) yang berfokus pada pengembangan produk berupa perangkat lunak untuk menyelesaikan permasalahan administratif organisasi (Whitten & Bentley, 2007). Metode pengembangan perangkat lunak yang digunakan adalah pendekatan Waterfall (Air Terjun) (Pressman & Maxim, 2020). Pendekatan ini dipilih karena menyediakan alur kerja yang berurutan dan linear, yang sangat cocok untuk sistem dengan kebutuhan fungsional yang sudah terdefinisi jelas sejak awal. Pendekatan ini mencakup empat fase utama, yaitu analisis kebutuhan, perancangan sistem, implementasi konstruksi, hingga pengujian perangkat lunak secara sistematis. Sesuai dengan spesifikasi pembangunan sistem informasi modern, penelitian ini memanfaatkan beberapa alat dan bahan teknologi pendukung. Perancangan visual antarmuka (User Interface) dikembangkan menggunakan aplikasi Figma, sedangkan proses coding dieksekusi menggunakan kerangka kerja Laravel berbasis bahasa pemrograman PHP dengan arsitektur Model-View-Controller (MVC). Untuk pengelolaan datanya, sistem ini menggunakan basis data relasional MySQL, serta didukung oleh pustaka Spatie Permission guna mengatur manajemen keamanan akses berbasis peran atau Role-Based Access Control (RBAC).
+
+Secara struktural, pembangunan perangkat lunak ini diarsitekturi menggunakan model Three-Tier Architecture. Model ini secara logis memisahkan lapisan antarmuka pengguna, lapisan pemrosesan logika bisnis aplikasi, dan lapisan manajemen basis data. Pemisahan arsitektur ini diterapkan secara khusus untuk memastikan bahwa sistem memiliki skalabilitas yang andal dalam menangani kuantitas anggota aktif LDK Syahid yang masif beserta dinamika portofolio organisasinya yang sangat tinggi. Lebih lanjut, rancangan pengembangan sistem ini juga menitikberatkan pada aspek pengendalian (Control) guna memproteksi sirkulasi data melalui implementasi keamanan RBAC yang terstruktur. Melalui mekanisme gerbang pengawasan ini, sistem mampu mengisolasi fungsionalitas secara presisi bagi 8 aktor pengurus internal (Helper), sehingga secara efektif meminimalisasi potensi manipulasi maupun pemalsuan rekam jejak portofolio anggota organisasi. 
+Metode Pengumpulan Data
+Lokasi penelitian dan pengambilan data dilaksanakan secara langsung di Lembaga Dakwah Kampus (LDK) Syahid, Universitas Islam Negeri Syarif Hidayatullah Jakarta. Guna merumuskan kebutuhan fungsional dan non-fungsional sistem secara komprehensif, pengumpulan data dilakukan melalui tiga pendekatan utama:
+
+a) Observasi Partisipatif
+Observasi dilakukan dengan meninjau secara langsung ekosistem dan proses bisnis organisasi yang sedang berjalan. Tinjauan ini difokuskan pada evaluasi alur manajemen aset, pendataan rekam jejak anggota, serta sirkulasi penerbitan kartu tanda anggota yang selama ini datanya masih tersebar dan dikelola secara manual. Keterlibatan langsung secara praktis di dalam divisi operasional pendukung, khususnya divisi media kreatif, memberikan wawasan faktual mengenai hambatan birokrasi pembentukan portofolio yang selama ini menjadi kendala utama pengurus.
+
+b) Wawancara Mendalam
+Pengumpulan data diperkuat melalui wawancara mendalam (in-depth interview) yang melibatkan [isi jumlah partisipan, misal: 5] responden. Partisipan terdiri dari jajaran Badan Pengurus Harian (BPH) serta pengurus inti divisi guna menggali spesifikasi kebutuhan dari sudut pandang manajemen. Topik wawancara secara spesifik mencakup kendala legalisasi berkas, urgensi digitalisasi data keanggotaan, hingga identifikasi permasalahan terkait banyaknya anggota yang gagal melewati screening rekrutmen akibat format resume yang tidak memenuhi standar tata letak Applicant Tracking System (ATS).
+
+c) Studi Literatur
+Studi literatur dilakukan untuk mengkaji landasan teori dan penelitian terdahulu yang relevan sebagai acuan pengembangan sistem (Whitten & Bentley, 2007). Kajian pustaka ini difokuskan pada literatur yang membahas pemodelan arsitektur Three-Tier, efektivitas kerangka kerja Laravel dalam mengelola basis data, prinsip desain User Interface dan User Experience (UI/UX) untuk portfolio builder, serta pedoman integrasi keamanan Role-Based Access Control (RBAC) menggunakan pustaka Spatie Permission.
+
+
+
+
+
+Tahapan Penelitian
+Siklus pengerjaan sistem secara keseluruhan mengadopsi pendekatan Waterfall yang direpresentasikan melalui flowchart pada Gambar 1 (Pressman & Maxim, 2020).
+
+
+Gambar 1. Flowchart Tahapan Penelitian
+
+Berdasarkan alur pada Gambar 1, tahapan pengembangan perangkat lunak dalam penelitian ini secara sistematis diuraikan ke dalam empat fase utama, yaitu:
+
+a) Analisis Kebutuhan Sistem
+Fase ini berfokus pada evaluasi sistem berjalan menggunakan kerangka kerja PIECES (Performance, Information, Economy, Control, Efficiency, Service). Analisis ini digunakan untuk mengidentifikasi secara presisi letak kelemahan tata kelola data konvensional yang kemudian menjadi dasar perancangan fitur baru, sebagaimana dirangkum pada Tabel 1.
+ 
+Identifikasi Permasalahan Sistem Berjalan dengan Framework PIECES
+Kategori
+Kelemahan Sistem Berjalan (Manual)
+Usulan Solusi Sistem Baru (Website)
+Performance
+Anggota sering gagal rekrutmen magang karena format CV tidak standar mesin pembaca.
+Sistem memiliki fitur pengecekan algoritma ATS untuk memastikan struktur CV lulus screening.
+Information
+Sebaran keahlian kader tidak tersentralisasi sehingga menyulitkan skill-mapping.
+Repositori career-prep digital yang tersentralisasi dan dikurasi oleh Helper.
+Economy
+Mahasiswa tingkat akhir menghabiskan biaya dan waktu untuk mencari template CV HRD.
+Solusi all-in-one portfolio builder terintegrasi yang dapat dicetak gratis.
+Control
+Lemahnya gerbang pengawasan data memicu potensi pemalsuan rekam jejak organisasi.
+Penerapan RBAC via Spatie Permission dan validasi QR Code memproteksi sirkulasi data.
+Efficiency
+Anggota harus mendesain ulang berkas resume dari nol di platform eksternal.
+Sistem men-generate portofolio secara otomatis dari input biodata yang ada di database.
+Service
+Birokrasi legalisasi berkas berjalan lambat dan tidak ramah pengguna.
+Layanan self-service yang intuitif untuk mengunduh berkas tervalidasi kapan saja.
+
+b) Perancangan Arsitektur dan Antarmuka
+Setelah permasalahan berhasil dipetakan, tahap selanjutnya adalah merancang arsitektur sistem dan basis data menggunakan Unified Modeling Language (UML) yang mencakup Use Case, Sequence, dan Class Diagram guna mendefinisikan aliran objek secara presisi. Selain itu, dirancang pula wireframe dan prototipe antarmuka (User Interface) dengan pendekatan gaya visual Dark Academia yang disesuaikan dengan pedoman identitas branding organisasi guna memberikan pengalaman pengguna yang elegan dan intuitif.
+
+c) Implementasi Konstruksi Kode
+Desain yang telah disetujui kemudian diterjemahkan ke dalam baris kode program. Memasuki fase implementasi, konstruksi dieksekusi untuk membangun fitur inti berupa Modul Digital CV (ATS Builder) beserta struktur antarmukanya. Tahapan ini juga mengimplementasikan pemisahan hak akses dan fungsionalitas antaraktor menggunakan Role-Based Access Control (RBAC).
+
+d) Pengujian Perangkat Lunak
+Tahapan diakhiri dengan fase pengujian perangkat lunak menggunakan metode Black Box Testing. Pengujian ini difokuskan pada verifikasi fungsionalitas fitur inti, memastikan tidak terdapat galat pada input-output pengguna, dan memvalidasi bahwa dokumen luaran portofolio digital berstandar ATS telah siap dan aman digunakan.
+
+Hasil dan pembahasan
+
+
+
+
+Analisis dan Perancangan Sistem
+Tahapan analisis kelayakan sistem (Feasibility Analysis) merupakan fondasi krusial dalam perancangan perangkat lunak ini guna memastikan solusi yang ditawarkan dapat mengatasi inefisiensi birokrasi organisasi. Secara arsitektural, interaksi fungsionalitas dan batasan wewenang sistem diatur di dalam Use Case Diagram. Lebih lanjut, untuk memetakan alur pemrosesan Modul Digital CV yang menjadi inovasi utama dalam penelitian ini, interaksi input-output digambarkan secara rinci melalui Sequence Diagram.
+ 
+
+Gambar 2. Sequence Diagram Alur Pengecekan ATS dan Generasi Portofolio
+
+Berdasarkan Gambar 2, narasi algoritma pada diagram ini bekerja secara otomatis dengan tahapan sebagai berikut: Sistem pertama-tama mengekstrak input dari user. Kemudian, sistem melakukan pengecekan terhadap struktur kelengkapan dokumen yang mencakup header, riwayat kepanitiaan, dan skills. Proses dilanjutkan dengan melakukan keyword matching terhadap database kompetensi, serta menyesuaikan fon agar dokumen tersebut menjadi ramah-ATS (ATS-Friendly). Jika data lolos evaluasi internal, sistem akan mengeluarkan skor kelayakan dan me-render dokumen portofolio ke dalam format PDF.
+
+Setelah interaksi proses terpetakan, rancangan arsitektur basis data dipetakan menggunakan Class Diagram. Diagram ini secara spesifik mendefinisikan 16 kelas tabel fisik MySQL beserta operasinya (termasuk metode hitungSkorATS()). Pemetaan tabel ini berfungsi untuk memastikan seluruh entitas data anggota terintegrasi dengan baik saat proses perenderan CV dilakukan.
+
+
+Gambar 3. Class Diagram Struktur Basis Data Relasional Terintegrasi
+
+Berdasarkan Gambar 3, skema manajemen basis data MySQL ini mengintegrasikan seluruh komponen krusial penyusun Digital CV, mulai dari entitas profil dasar, manajemen autentikasi berlapis, riwayat keanggotaan divisi, hingga pencatatan portofolio prestasi dan kepanitiaan. Relasi antartabel dihubungkan melalui Foreign Key dengan aturan ketat (Cascade Constraints) guna memastikan integritas data (Data Integrity) tetap terjaga. Melalui rancangan dengan tingkat normalisasi tinggi ini, ketika anggota memperbarui log aktivitas mereka, proses ekstraksi dan perenderan tata letak ATS dapat berjalan sempurna tanpa memicu anomali data luaran.
+
+
+
+
+
+Implementasi Antarmuka dan Portofolio Dinamis
+Dalam tahap implementasi, sistem Portfolio Builder LDK Syahid bekerja secara cerdas dengan menarik data secara dinamis dari fondasi 16 tabel basis data relasional, mulai dari tabel USERS, PROFILES, PRESTASI, hingga EVENT kepanitiaan. Proses penarikan informasi ini dieksekusi sedemikian rupa sehingga pengguna tidak perlu melakukan entri data secara berulang ketika ingin memutakhirkan rekam jejak mereka.
+
+Dari segi perancangan User Interface (UI) dan User Experience (UX), antarmuka pembuat portofolio dirancang secara spesifik dengan mengusung palet warna bernuansa Dark Academia yang dipadukan dengan sentuhan modern-profesional. Pendekatan gaya visual ini diterapkan untuk memberikan representasi identitas organisasi yang akademis dan eksklusif, selaras dengan pedoman tata kelola media kreatif organisasi. Penerapan tema tersebut memastikan UI/UX pada dashboard pengguna tetap elegan, intuitif, dan menonjolkan estetika visual secara maksimal tanpa sedikit pun mengorbankan aspek fungsionalitas kemudahan penggunaan (usability).
+
+Hasil implementasi antarmuka utama untuk modul pembuatan portofolio ini direpresentasikan pada Gambar 4.
+
+(Posisikan Gambar 4 Screenshot Dashboard / Beranda kamu di sini, pastikan rata tengah / simetris)
+
+Gambar 4. Antarmuka Halaman Dashboard Pengguna
+
+Berdasarkan Gambar 4, antarmuka Dashboard dirancang sebagai pusat kendali mandiri (self-service hub). Melalui halaman ini, anggota dapat memantau status keaktifan, melihat riwayat organisasi, serta mengakses modul-modul administratif lainnya. Penggunaan palet warna gelap yang dipadukan dengan tipografi serif dan sans-serif yang tegas tidak hanya mendukung estetika visual, tetapi juga meningkatkan keterbacaan teks (readability).
+
+Dalam mengelola modul-modul administratif tersebut, sistem mengimplementasikan pengamanan hak akses menggunakan Role-Based Access Control (RBAC) via Spatie Permission yang mengisolasi fungsionalitas 8 aktor pengurus internal (Helper). Pemetaan implementasi hak akses untuk setiap peran aktor diuraikan pada Tabel 2 berikut.
+
+Pemetaan Fungsionalitas Hak Akses Peran (RBAC)
+Aktor
+Nama Use Case Utama
+Deskripsi Fungsionalitas Hak Akses Peran
+User (Anggota)
+Manage Portfolio & Scan QR
+Mengisi biodata, mengunggah bukti sertifikat, absen kajian via QR, dan mengunduh CV PDF.
+HelperMedia
+Curate Portfolio & Manage Content
+Meninjau berkas antrean sertifikat anggota, melakukan aksi approve/reject, dan mengelola arsip media.
+HelperAdmin
+Validate Account & Broadcast
+Mengelola pendaftaran akun, memvalidasi status aktivasi anggota baru, dan menyebarkan pengumuman.
+HelperLetter
+Generate Auto Letter
+Mengotomatisasi penomoran surat resmi organisasi dan mengarsip dokumen persuratan digital.
+HelperEventMart
+Track Event & Inventory
+Mencatat program kerja, melacak kuota peserta, dan mengelola inventaris logistik fisik LDK Syahid.
+HelperCelsyahid
+Manage Mentoring Report
+Menginput laporan kemajuan mingguan, memantau data kelompok kecil (cell group), dan rekam progress report.
+HelperSPAM
+Manage Aspirations
+Mengakomodasi penyampaian pesan pengaduan anggota, baik terbuka maupun anonim.
+Superadmin
+System Maintenance & Override
+Memiliki hak akses tertinggi (highest privilege) untuk pemeliharaan database dan override kebijakan.
+
+Fokus inovasi utama dalam sistem ini terletak pada antarmuka Modul Digital CV berstandar Applicant Tracking System (ATS), yang hasil implementasinya direpresentasikan pada Gambar 5.
+
+(Kosong satu spasi tunggal, 10 pt di sini)
+(Posisikan Gambar 5 Screenshot Fitur ATS Builder / Hasil Output CV kamu di sini, pastikan rata tengah / simetris)
+
+Gambar 5. Antarmuka Modul Digital CV dan Luaran Dokumen
+
+Pada Modul Digital CV (Gambar 5), sistem menyediakan formulir interaktif di mana anggota dapat memutakhirkan rekam jejak kepanitiaan, keahlian (skills), dan portofolio prestasi. Alih-alih mengharuskan pengguna mendesain dokumen secara manual, sistem ini dilengkapi dengan rendering engine yang secara otomatis merakit masukan data (input) menjadi dokumen Portable Document Format (PDF). Algoritma perenderan secara ketat mengikuti pedoman desain ramah ATS, yaitu membuang elemen grafis kompleks, menyusun teks dalam tata letak kolom tunggal atau hierarki yang absolut, serta menggunakan fon standar industri. Hal ini memastikan bahwa luaran dokumen portofolio tidak hanya tervalidasi secara organisatoris, tetapi juga memiliki tingkat akurasi pembacaan (parsing) yang maksimal ketika dipindai oleh perangkat lunak rekrutmen di perusahaan.
+
+Pengujian Sistem
+Tahapan akhir dari fase implementasi perangkat lunak adalah melakukan verifikasi performa fungsionalitas dan algoritma fitur. Pengujian ini dieksekusi menggunakan metode Black Box Testing. Metode ini dipilih karena berfokus pada spesifikasi fungsional perangkat lunak, guna memastikan bahwa setiap masukan (input) dari pengguna dapat diproses oleh sistem untuk menghasilkan luaran (output) yang sesuai dengan ekspektasi rancangan awal tanpa harus menginspeksi struktur kode internal secara rumit.
+
+Pengujian difokuskan pada fungsionalitas inti dari inovasi sistem ini, yaitu Modul Digital CV dan validasi dokumen terintegrasi. Rangkuman hasil pengujian Black Box direpresentasikan pada Tabel 3 berikut.
+
+Tabel 3. Hasil Pengujian Fungsionalitas Sistem (Black Box Testing)
+Skenario Pengujian
+Hasil yang Diharapkan (Expected)
+Hasil Aktual
+Status
+User (Anggota) menyimpan pembaruan biodata, riwayat kepanitiaan, dan skills pada formulir.
+
+Data tersimpan secara akurat ke dalam basis data MySQL yang saling berelasi.
+Data berhasil terintegrasi tanpa redundansi (double entry).
+Valid
+Sistem menjalankan algoritma ATS Checking dan keyword matching pada data masukan pengguna.
+Sistem berhasil mengalkulasi dan menampilkan skor persentase kelayakan dokumen pengguna.
+Skor kelayakan ATS tampil secara real-time di antarmuka dashboard.
+Valid
+User (Anggota) menekan tombol "Generate CV" setelah data portofolio tervalidasi.
+Sistem me- render dokumen ke dalam format PDF dengan tata letak kolom tunggal standar ATS.
+Berkas luaran terunduh dalam format PDF sesuai dengan pedoman ramah-ATS.
+Valid
+Pengguna eksternal melakukan pemindaian (scan) QR Code yang tersemat pada dokumen CV luaran.
+Sistem mengarahkan pemindai ke halaman verifikasi orisinalitas portofolio di website resmi.
+Tautan QR Code berhasil membuka halaman validasi legalitas data milik pengguna.
+Valid
+
+Berdasarkan Tabel 3, seluruh skenario pengujian fungsionalitas utama menunjukkan status "Valid". Hal ini mengindikasikan bahwa fitur otomatisasi rendering dokumen (ATS-Friendly), mekanisme validasi keamanan melalui penyematan QR Code, serta proses integrasi arsitektur basis data telah berjalan dengan sempurna. Sistem secara efektif terbukti mampu mengeliminasi redundansi pencatatan (double entry) oleh pengurus divisi, memangkas birokrasi verifikasi portofolio secara manual, serta memfasilitasi anggota untuk mengunduh berkas Digital CV yang kredibel secara instan.
+
+KESIMPULAN
+Kesimpulan berisi hasil yang diperoleh dan pembahasan yang mempertimbangkan semua aspek yang terkait dengan apa yang ada dalam penelitian. Kesimpulan berupa hasil analisis dan pembahasan atau hasil uji hipotesis tentang fenomena yang diteliti. Kesimpulan bukan merupakan tulisan ulang dari pembahasan, dan juga bukan merupakan ringkasan. Kesimpulan disampaikan secara singkat dalam bentuk kalimat utuh atau dalam bentuk penyampaian butir-butir kesimpulan secara berurutan. Kesimpulan khusus berasal dari analisis, sedangkan kesimpulan umum adalah hasil generalisasi atau keterkaitan dengan fenomena serupa yang diacu dari publikasi terdahulu. Pada bagian kesimpulan harus menjawab pertanyaan dan permasalahan riset yang diungkapkan pada pendahuluan. Pada bagian kesimpulan juga dapat berisi saran yang berupa rekomendasi akademik atau tindak lanjut nyata atas kesimpulan yang diperoleh. 
+DAFTAR PUSTAKA
+Chaer, A. (1994). Linguistik Umum. Rineka Cipta.
+Hidayat, R., & Minati, S. (2019). Comparative Analysis of Text Mining Classification Algorithms for English and Indonesian Qur’an Translation. IJID (International Journal on Informatics for Development), 8(1), 47-51. https://doi.org/10.14421/ijid.2019.08108
+Nuruzzaman, M. T., & Ferng, H. W. (2016). A Low Energy Consumption Routing Protocol for Mobile Sensor Networks with a Path-constrained Mobile Sink. 2016 IEEE International Conference on Communications, 1–6. https://doi.org/10.1109/ICC.2016.7511316
+Nuruzzaman, M. T., Lee, C., Abdullah, M. F. A. Bin, & Choi, D. (2012). Simple SMS Spam Filtering on Independent Mobile Phone. Security and Communication Networks, 5(10), 1209–1220. https://doi.org/10.1002/sec.577
+Saleem, R. (2011). Cloud Computing’s Effect on Enterprises. Lund University.
+Zigbee. (2019). Zigbee Alliance. https://zigbeealliance.org/

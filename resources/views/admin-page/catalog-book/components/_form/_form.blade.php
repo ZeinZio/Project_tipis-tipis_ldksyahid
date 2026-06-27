@@ -1,0 +1,530 @@
+@php
+    $operation = $operation ?? 'create';
+    $book = $book ?? null;
+    $titleForm = $titleForm ?? '';
+    $entityLabel = $entityLabel ?? 'Book';
+    $languages = $languages ?? [];
+    $bookCategories = $bookCategories ?? [];
+    $authorTypes = $authorTypes ?? [];
+    $availabilityTypes = $availabilityTypes ?? [];
+@endphp
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row p-2 bg-light rounded justify-content-center mx-0">
+        <div class="row">
+            <h1 class="page-title">
+                <i class="fa fa-{{ $operation === 'create' ? 'plus-circle' : ($operation === 'update' ? 'edit' : 'eye') }} me-2"></i>
+                <span>{{ ucfirst($titleForm) }}</span>
+                <span class="highlighted-text ms-1">{{ $entityLabel }}</span>
+                @if($operation !== 'create' && $book)
+                    <small class="text-muted d-block mt-2">{{ $book->titleBook }}</small>
+                @endif
+            </h1>
+
+            @if ($operation !== 'view')
+                <div class="col-md-12 my-3">
+                    @if (session('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+
+                    @if ($errors->any())
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>There were some problems with your input:</strong>
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+
+                    @if (session('error'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ session('error') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+                </div>
+            @endif
+
+            @if ($operation !== 'view')
+                <form action="{{ $operation === 'create' ? route('admin.catalog.books.store') : route('admin.catalog.books.update', $book->bookID) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @if ($operation === 'update')
+                        @method('PUT')
+                    @endif
+            @endif
+
+            <div class="col-md-12 mb-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="row">
+                            <!-- Basic Information -->
+                            <div class="col-md-6">
+                                <h5 class="section-title mb-3"><i class="fas fa-info-circle me-2"></i>Basic Information</h5>
+
+                                <div class="mb-3">
+                                    <label for="isbn" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">ISBN</label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">{{ $book->isbn ?: '-' }}</div>
+                                    @else
+                                        <input type="text" class="form-control @error('isbn') is-invalid @enderror" id="isbn" name="isbn"
+                                            value="{{ old('isbn', $book->isbn ?? '') }}">
+                                        @error('isbn')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    @endif
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="titleBook" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        Title @if($operation !== 'view') <span class="text-danger">*</span> @endif
+                                    </label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">{{ $book->titleBook }}</div>
+                                    @else
+                                        <input type="text" class="form-control @error('titleBook') is-invalid @enderror" id="titleBook" name="titleBook"
+                                            value="{{ old('titleBook', $book->titleBook ?? '') }}" required>
+                                        @error('titleBook')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    @endif
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="authorName" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        Author @if($operation !== 'view') <span class="text-danger">*</span> @endif
+                                    </label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">{{ $book->authorName }}</div>
+                                    @else
+                                        <input type="text" class="form-control @error('authorName') is-invalid @enderror" id="authorName" name="authorName"
+                                            value="{{ old('authorName', $book->authorName ?? '') }}" required>
+                                        @error('authorName')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    @endif
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="publisherName" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        Publisher @if($operation !== 'view') <span class="text-danger">*</span> @endif
+                                    </label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">{{ $book->publisherName }}</div>
+                                    @else
+                                        <input type="text" class="form-control @error('publisherName') is-invalid @enderror" id="publisherName" name="publisherName"
+                                            value="{{ old('publisherName', $book->publisherName ?? '') }}" required>
+                                        @error('publisherName')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    @endif
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="authorTypeID" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        Author Type @if($operation !== 'view') <span class="text-danger">*</span> @endif
+                                    </label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">{{ $book->getAuthorType->authorTypeName ?? 'N/A' }}</div>
+                                    @else
+                                        <select class="form-select @error('authorTypeID') is-invalid @enderror" id="authorTypeID" name="authorTypeID" required>
+                                            <option value="">Select Author Type</option>
+                                            @foreach($authorTypes as $authorType)
+                                                <option value="{{ $authorType->authorTypeID }}"
+                                                    {{ old('authorTypeID', $book->authorTypeID ?? '') == $authorType->authorTypeID ? 'selected' : '' }}>
+                                                    {{ $authorType->authorTypeName }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    @endif
+                                    @error('authorTypeID')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="availabilityTypeID" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        Availability Type @if($operation !== 'view') <span class="text-danger">*</span> @endif
+                                    </label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">{{ $book->getAvailabilityType->availabilityTypeName ?? 'N/A' }}</div>
+                                    @else
+                                        <select class="form-select @error('availabilityTypeID') is-invalid @enderror" id="availabilityTypeID" name="availabilityTypeID" required>
+                                            <option value="">Select Availability Type</option>
+                                            @foreach($availabilityTypes as $availabilityType)
+                                                <option value="{{ $availabilityType->availabilityTypeID }}"
+                                                    {{ old('availabilityTypeID', $book->availabilityTypeID ?? '') == $availabilityType->availabilityTypeID ? 'selected' : '' }}>
+                                                    {{ $availabilityType->availabilityTypeName }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    @endif
+                                    @error('availabilityTypeID')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Additional Information -->
+                            <div class="col-md-6">
+                                <h5 class="section-title mb-3"><i class="fas fa-book-open me-2"></i>Additional Information</h5>
+
+                                <div class="mb-3">
+                                    <label for="languageID" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        Language @if($operation !== 'view') <span class="text-danger">*</span> @endif
+                                    </label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">{{ $book->getLanguage->languageName ?? 'N/A' }}</div>
+                                    @else
+                                        <select class="form-select @error('languageID') is-invalid @enderror" id="languageID" name="languageID" required>
+                                            <option value="">Select Language</option>
+                                            @foreach($languages as $language)
+                                                <option value="{{ $language->languageID }}"
+                                                    {{ old('languageID', $book->languageID ?? '') == $language->languageID ? 'selected' : '' }}>
+                                                    {{ $language->languageName }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    @endif
+                                    @error('languageID')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="bookCategoryID" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        Category @if($operation !== 'view') <span class="text-danger">*</span> @endif
+                                    </label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">{{ $book->getBookCategory->bookCategoryName ?? 'N/A' }}</div>
+                                    @else
+                                        <select class="form-select @error('bookCategoryID') is-invalid @enderror" id="bookCategoryID" name="bookCategoryID" required>
+                                            <option value="">Select Category</option>
+                                            @foreach($bookCategories as $category)
+                                                <option value="{{ $category->bookCategoryID }}"
+                                                    {{ old('bookCategoryID', $book->bookCategoryID ?? '') == $category->bookCategoryID ? 'selected' : '' }}>
+                                                    {{ $category->bookCategoryName }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    @endif
+                                    @error('bookCategoryID')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="year" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        Year @if($operation !== 'view') <span class="text-danger">*</span> @endif
+                                    </label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">{{ $book->year }}</div>
+                                    @else
+                                        <input type="number" class="form-control @error('year') is-invalid @enderror" id="year" name="year"
+                                            value="{{ old('year', $book->year ?? '') }}"
+                                            min="1900" max="{{ date('Y') }}" required>
+                                        @error('year')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    @endif
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="pages" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        Pages @if($operation !== 'view') <span class="text-danger">*</span> @endif
+                                    </label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">{{ $book->pages }}</div>
+                                    @else
+                                        <input type="number" class="form-control @error('pages') is-invalid @enderror" id="pages" name="pages"
+                                            value="{{ old('pages', $book->pages ?? '') }}"
+                                            min="1" required>
+                                        @error('pages')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    @endif
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="edition" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">Edition</label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">{{ $book->edition ?: '-' }}</div>
+                                    @else
+                                        <input type="text" class="form-control @error('edition') is-invalid @enderror" id="edition" name="edition"
+                                            value="{{ old('edition', $book->edition ?? '') }}">
+                                        @error('edition')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    @endif
+                                </div>
+
+                                <div class="mb-3 link-field">
+                                    <label for="purchaseLink" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">Purchase Link</label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">
+                                            @if($book->purchaseLink)
+                                                <a href="{{ $book->purchaseLink }}" target="_blank">{{ $book->purchaseLink }}</a>
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </div>
+                                    @else
+                                        <input type="url" class="form-control @error('purchaseLink') is-invalid @enderror" id="purchaseLink" name="purchaseLink"
+                                            value="{{ old('purchaseLink', $book->purchaseLink ?? '') }}"
+                                            placeholder="https://example.com">
+                                        @error('purchaseLink')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                        <div class="form-text">Optional - Link to purchase the book</div>
+                                    @endif
+                                </div>
+
+                                <div class="mb-3 link-field">
+                                    <label for="borrowLink" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">Borrow Link</label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">
+                                            @if($book->borrowLink)
+                                                <a href="{{ $book->borrowLink }}" target="_blank">{{ $book->borrowLink }}</a>
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </div>
+                                    @else
+                                        <input type="url" class="form-control @error('borrowLink') is-invalid @enderror" id="borrowLink" name="borrowLink"
+                                            value="{{ old('borrowLink', $book->borrowLink ?? '') }}"
+                                            placeholder="https://example.com">
+                                        @error('borrowLink')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                        <div class="form-text">Optional - Link to borrow the book</div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Description Section -->
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <h5 class="section-title mb-3"><i class="fas fa-align-left me-2"></i>Description</h5>
+
+                                <div class="mb-3">
+                                    <label for="description" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        Short Description @if($operation !== 'view') <span class="text-danger">*</span> @endif
+                                    </label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">{{ $book->description }}</div>
+                                    @else
+                                        <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="3" required>{{ old('description', $book->description ?? '') }}</textarea>
+                                    @endif
+                                    @error('description')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="synopsis" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">Synopsis</label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">{{ $book->synopsis ?? '-' }}</div>
+                                    @else
+                                        <textarea class="form-control @error('synopsis') is-invalid @enderror" id="synopsis" name="synopsis" rows="5">{{ old('synopsis', $book->synopsis ?? '') }}</textarea>
+                                    @endif
+                                    @error('synopsis')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Media Section -->
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <h5 class="section-title mb-3">
+                                    <i class="fas fa-image me-2"></i>
+                                    {{ $operation === 'view' ? 'Cover Image' : ($operation === 'create' ? 'Upload Cover Image' : 'Cover Image Management') }}
+                                </h5>
+
+                                @if ($operation === 'view')
+                                    <div class="mb-3">
+                                        <div>
+                                            @if($book->coverImageGdriveID)
+                                                <img src="{{ $book->coverImageUrl() }}" alt="Book Cover" class="img-thumbnail" style="max-height: 300px;">
+                                            @else
+                                                <div class="no-image-placeholder bg-light p-4 text-center rounded border" style="max-height: 300px;">
+                                                    <i class="fas fa-image fa-3x text-muted mb-2"></i>
+                                                    <p class="mb-0">No Cover Image</p>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="mb-3">
+                                        <label for="coverImage" class="form-label">
+                                            {{ $operation === 'create' ? 'Upload Cover Image' : 'Update Cover Image' }}
+                                            (Optional)
+                                        </label>
+                                        <input type="file" class="form-control @error('coverImage') is-invalid @enderror" id="coverImage" name="coverImage"
+                                            accept="image/*">
+                                        @error('coverImage')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                        <div class="form-text">Recommended size: 300x450 pixels, max 2MB</div>
+                                        @if ($operation === 'update' && $book->coverImage)
+                                            <div class="form-text">Leave blank to keep current image</div>
+                                        @endif
+                                    </div>
+                                @endif
+                            </div>
+
+                            <div class="col-md-6">
+                                <h5 class="section-title mb-3"><i class="fas fa-external-link-alt me-2"></i>Reader Link</h5>
+
+                                @if ($operation === 'view')
+                                    <div class="mb-3">
+                                        <div class="reader-link-preview text-center">
+                                            @if($book->readerLink)
+                                                <div class="reader-link-content">
+                                                    <i class="fas fa-external-link-alt fa-3x text-primary mb-2"></i>
+                                                    <p class="mb-2">AnyFlip Reader Link Available</p>
+                                                    <a href="{{ $book->getFormattedReaderLink() }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                                        <i class="fas fa-external-link-alt me-1"></i> Open Reader
+                                                    </a>
+                                                    <div class="mt-2">
+                                                        <small class="text-muted">{{ $book->readerLink }}</small>
+                                                    </div>
+                                                </div>
+                                            @else
+                                                <div class="no-media-placeholder">
+                                                    <i class="fas fa-external-link-alt fa-2x text-muted"></i>
+                                                    <p>No Reader Link</p>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="mb-3">
+                                        <label for="readerLink" class="form-label">
+                                            AnyFlip Reader Link
+                                            (Optional)
+                                        </label>
+                                        <input type="url" class="form-control @error('readerLink') is-invalid @enderror" id="readerLink" name="readerLink"
+                                            value="{{ old('readerLink', $book->readerLink ?? '') }}"
+                                            placeholder="https://anyflip.com/...">
+                                        @error('readerLink')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                        <div class="form-text">
+                                            Enter AnyFlip URL or path (e.g., https://anyflip.com/ueiyz/goae/ or ueiyz/goae)
+                                        </div>
+                                        @if ($operation === 'update' && $book->readerLink)
+                                            <div class="form-text">Leave blank to remove current reader link</div>
+                                        @endif
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- SEO & Tags -->
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <h5 class="section-title mb-3"><i class="fas fa-tags me-2"></i>Tags & SEO</h5>
+
+                                <div class="mb-3">
+                                    <label for="tags" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">Tags</label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">{{ $book->tags ?: '-' }}</div>
+                                    @else
+                                        <input type="text" class="form-control @error('tags') is-invalid @enderror" id="tags" name="tags"
+                                            value="{{ old('tags', $book->tags ?? '') }}" placeholder="Separate tags with commas">
+                                        @error('tags')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                        <div class="form-text">Example: islam, education, history</div>
+                                    @endif
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="metaKeywords" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">Meta Keywords</label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">{{ $book->metaKeywords ?: '-' }}</div>
+                                    @else
+                                        <textarea class="form-control @error('metaKeywords') is-invalid @enderror" id="metaKeywords" name="metaKeywords" rows="2">{{ old('metaKeywords', $book->metaKeywords ?? '') }}</textarea>
+                                    @endif
+                                    @error('metaKeywords')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="metaDescription" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">Meta Description</label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">{{ $book->metaDescription ?: '-' }}</div>
+                                    @else
+                                        <textarea class="form-control @error('metaDescription') is-invalid @enderror" id="metaDescription" name="metaDescription" rows="3">{{ old('metaDescription', $book->metaDescription ?? '') }}</textarea>
+                                    @endif
+                                    @error('metaDescription')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                    @if ($operation !== 'view')
+                                        <div class="form-text">Recommended length: 150-160 characters</div>
+                                    @endif
+                                </div>
+
+                                @if ($operation === 'view')
+                                    <div class="row mt-3">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold">Created At</label>
+                                            <div class="form-control-plaintext">
+                                                {{ \Carbon\Carbon::parse($book->created_at)->isoFormat('dddd, DD MMMM YYYY') }}
+                                                <small class="text-muted ms-1">({{ \Carbon\Carbon::parse($book->created_at)->format('H:i T') }})</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold">Last Updated</label>
+                                            <div class="form-control-plaintext">
+                                                {{ \Carbon\Carbon::parse($book->updated_at)->isoFormat('dddd, DD MMMM YYYY') }}
+                                                <small class="text-muted ms-1">({{ \Carbon\Carbon::parse($book->updated_at)->format('H:i T') }})</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if ($operation !== 'view')
+                <!-- Form Actions -->
+                <div class="row mb-5">
+                    <div class="col-md-12 d-flex justify-content-end gap-2">
+                        <button type="button" onclick="window.location.href='{{ route('admin.catalog.books.indexAdmin') }}'" class="btn btn-danger">
+                            <i class="fa fa-times me-1"></i> Cancel
+                        </button>
+                        <button type="submit" class="btn btn-custom-primary">
+                            <i class="fa fa-save me-1"></i> {{ $operation === 'create' ? 'Save Book' : 'Update Book' }}
+                        </button>
+                    </div>
+                </div>
+                </form>
+            @else
+                <!-- View Mode Actions -->
+                <div class="row mb-5">
+                    <div class="col-md-12 d-flex justify-content-end gap-2">
+                        <a href="{{ route('admin.catalog.books.indexAdmin') }}" class="btn btn-secondary">
+                            <i class="fa fa-arrow-left me-1"></i> Back
+                        </a>
+                        <a href="{{ route('admin.catalog.books.edit', $book->bookID) }}" class="btn btn-custom-primary">
+                            <i class="fa fa-edit me-1"></i> Edit
+                        </a>
+                    </div>
+                </div>
+            @endif
+        </div>
+    </div>
+</div>
