@@ -30,3 +30,5 @@ Route::group(['middleware'=>'auth:sanctum'], function(){
     Route::resource('news', APINewsController::class);
 });
 
+Route::post('/gemini/chat', [\App\Http\Controllers\API\CvAiAssistantController::class, 'chat']);
+

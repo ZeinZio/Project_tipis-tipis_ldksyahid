@@ -22,10 +22,21 @@ class CvController extends Controller
         $title = 'Manajemen CV';
 
         $activeTab = $request->query('tab', 'personal');
+        $selectedTemplate = session('cv_selected_template', 'harvard');
         
         $qrCode = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('svg')->size(100)->generate(route('verify.cv', ['hash' => bin2hex(encrypt($user->id))])));
 
-        return view('dashboard.user.cv.index', compact('user', 'profile', 'educations', 'experiences', 'skills', 'projects', 'title', 'activeTab', 'qrCode'));
+        return view('dashboard.user.cv.index', compact('user', 'profile', 'educations', 'experiences', 'skills', 'projects', 'title', 'activeTab', 'qrCode', 'selectedTemplate'));
+    }
+
+    public function updateTemplate(Request $request)
+    {
+        $request->validate([
+            'template' => 'required|string'
+        ]);
+
+        session(['cv_selected_template' => $request->template]);
+        return response()->json(['success' => true]);
     }
 
     public function updatePersonal(Request $request)

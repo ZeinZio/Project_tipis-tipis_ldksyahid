@@ -281,8 +281,9 @@ Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('adm
 // Route User Dashboard (Digital CV & Portfolio)
 Route::get('/user/dashboard', [\App\Http\Controllers\UserDashboardController::class, 'index'])->name('user.dashboard')->middleware(['auth']);
 
-// Route User CV Management
-Route::get('/user/cv', [\App\Http\Controllers\CvController::class, 'index'])->name('user.cv.index')->middleware(['auth']);
+// Route CV Builder Lama / PDF Builder (Baru)
+Route::get('/user/cv/pdf', [\App\Http\Controllers\CvController::class, 'index'])->name('user.cv.index')->middleware(['auth']);
+Route::post('/user/cv/template', [\App\Http\Controllers\CvController::class, 'updateTemplate'])->name('user.cv.updateTemplate')->middleware(['auth']);
 Route::post('/user/cv/personal', [\App\Http\Controllers\CvController::class, 'updatePersonal'])->name('user.cv.updatePersonal')->middleware(['auth']);
 
 Route::post('/user/cv/education', [\App\Http\Controllers\CvController::class, 'storeEducation'])->name('user.cv.storeEducation')->middleware(['auth']);
@@ -298,6 +299,7 @@ Route::get('/verify-cv/{hash}', [\App\Http\Controllers\CvController::class, 'ver
 Route::get('/verify-portfolio/{hash}', [\App\Http\Controllers\PortfolioController::class, 'publicStream'])->name('verify.portfolio');
 Route::get('/user/cv/stream', [\App\Http\Controllers\CvController::class, 'stream'])->name('user.cv.stream')->middleware(['auth']);
 Route::get('/user/cv/download', [\App\Http\Controllers\CvController::class, 'download'])->name('user.cv.download')->middleware(['auth']);
+Route::get('/user/cv-builder/editor/{template_id}', [\App\Http\Controllers\CvBuilderController::class, 'editor'])->name('user.cv-builder.editor')->middleware(['auth']);
 
 // Route User Portfolio Builder (Web)
 Route::get('/user/portfolio', [\App\Http\Controllers\PortfolioController::class, 'index'])->name('user.portfolio.index')->middleware(['auth']);
